@@ -1,5 +1,7 @@
 
 '''
+i have added this first line from the mobile app
+
 This is the main part of example where i will call the fun to be executed
 for example here i will call a fun which will add user info in a database
 or a i will call a fun by importing from the database_fun.py module which 
