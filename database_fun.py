@@ -98,6 +98,45 @@ def find_user_from_id_(id_:int = None):
         return None
 
 
+def delete_user_by_id_1st_thinking(id_:int = 1):
+    '''I will pass a id_ value and my one row will be deleted form my table
+    '''
+    print("before update", find_user_from_id_(id_))
+
+    user_obj = session.query(UserDetails).filter(UserDetails.id_ == id_).first()
+    session.delete(user_obj)
+    session.commit()
+    print("Delete of the row id of", id_, "has been deleted")
+    print("After update", find_user_from_id_(id_))
+
+
+
+
+def delete_user_by_id_(id_:int = 1):
+    '''I will pass a id_ value and my one row will be deleted form my table
+    '''
+    if id_ is None:
+        print("Please provide a valid id_ other than None.")
+        return
+    
+    user_to_delete = find_user_from_id_(id_)
+    if user_to_delete is None:
+        print(f"No user found with id_ {id_}. Nothing deleted.")
+        return
+    
+    print("before update", find_user_from_id_(id_))
+
+    user_obj = session.query(UserDetails).filter(UserDetails.id_ == id_).first()
+    session.delete(user_obj)
+    session.commit()
+    print("Delete of the row id of", id_, "has been deleted")
+    print("After update", find_user_from_id_(id_))
+
+
+
+
+
+
 
 
 def update_user_by_id(id_, **kwargs):
