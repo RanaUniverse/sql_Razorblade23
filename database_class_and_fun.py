@@ -4,12 +4,12 @@
 Here i will defines the class of my main datbase logic 
 so that i can use this in other places easily
 Here i used pathlib's Path so that the .db file will saved in the folder
-all the fun i made here, i will use this in main.py this is my logic
 '''
 
 from datetime import datetime
 from pathlib import Path
-
+import random
+from typing import List
 
 from sqlalchemy import create_engine
 from sqlalchemy import Column
@@ -98,29 +98,23 @@ class UserDetails(Base):
 
 
 
-
+    # from typing import List
+    # def add_multiple_users(users: List['UserDetails']):
     @staticmethod
-    def check_user_is_premium_new(user_id_: int = None):
-        user_obj = session.query(UserDetails).filter(UserDetails.user_id_ == user_id_).first()
-        print("userdetials are", user_obj)
-        if user_obj:
-            if user_obj.is_premium_ == True:
-                return True
-            else:
-                return False
-        else:
-            return None
+    def add_multiple_users(users: type[List["UserDetails"]]):
+        """Add multiple UserDetails objects to the database.and show the id_"""
+        session.add_all(users)
+        session.commit()
+
+        for user in users:
+            print(user.id_, user.full_name_)
+            
 
 
-    @staticmethod
-    def fun_to_get_premium_value(id_value: int = 0):
-        user_obj = session.query(UserDetails).filter(UserDetails.user_id_ == id_value).first()
-        value = user_obj.is_premium_
-        print(value)
 
 
     @staticmethod
-    def insert_many_row_one_by_one(number_of_row: int = 1):
+    def insert_many_row_one_by_one_fake(number_of_row: int = 1):
         '''This is not good fun, rather i need to make a add_all fun'''
         for i in range(number_of_row):
             user_obj: UserDetails = UserDetails(
@@ -133,7 +127,7 @@ class UserDetails(Base):
 
 
     @staticmethod            
-    def insert_many_rows(number_of_rows: int = 1):
+    def insert_many_rows_fake(number_of_rows: int = 1):
         '''Insert multiple rows into the database using add_all method.'''
         users = []
         for i in range(number_of_rows):
@@ -157,24 +151,6 @@ class UserDetails(Base):
 Base.metadata.create_all(engine)
 
 
-#Below functions i made for checking purpose
-def count_total_users():
-    '''Count the total number of users'''
-    count = session.query(UserDetails).count()
-    session.close()
-    return count
-
-def get_all_users():
-    '''Get all users from the database'''
-    users = session.query(UserDetails).all()
-    session.close()
-    return users
-
-def fun_to_get_premium_value(id_value: int = 0):
-    user_obj = session.query(UserDetails).filter(UserDetails.user_id_ == id_value).first()
-    value = user_obj.is_premium_
-    print(value)
-
 
 
 if __name__ == "__main__":
@@ -184,14 +160,34 @@ if __name__ == "__main__":
     fake = Faker()
     print("Starting the Main Function of this Scripts Running")
 
-    UserDetails.insert_many_row_one_by_one(100)
-    UserDetails.insert_many_rows(10)
+    user_1 = UserDetails(
+        user_id_= random.randint(100,222),
+        user_name_= (fake.name()).replace(" ", "_"),
+        full_name_= fake.name(),
+        is_premium_= random.choice([True, False]),
+        validity_= fake.date_time_between(start_date= datetime(2025,1,1,1,1,0), end_date= datetime(2025,7,1,1,1,0))
+    )
+    user_2 = UserDetails(
+        user_id_= random.randint(100,222),
+        user_name_= (fake.name()).replace(" ", "_"),
+        full_name_= fake.name(),
+        is_premium_= random.choice([True, False]),
+        validity_= fake.date_time_between(start_date= datetime(2025,1,1,1,1,0), end_date= datetime(2025,7,1,1,1,0))
+    )
+    user_3 = UserDetails(
+        user_id_= random.randint(100,222),
+        user_name_= (fake.name()).replace(" ", "_"),
+        full_name_= fake.name(),
+        is_premium_= random.choice([True, False]),
+        validity_= fake.date_time_between(start_date= datetime(2025,1,1,1,1,0), end_date= datetime(2025,7,1,1,1,0))
+    )
 
-
-    fun_to_get_premium_value(187)
-    fun_to_get_premium_value(189)
-
-
-
-
+    # print(UserDetails.get_all_users())
+    user_1 = UserDetails(
+        user_id_= 888,
+        user_name_= "rana_uni",
+        full_name_="Rana Universe",
+        is_premium_= True,
+        validity_= datetime(2025,7,1,1,1,0))
+    user_1.add_user_return_id_()
 
