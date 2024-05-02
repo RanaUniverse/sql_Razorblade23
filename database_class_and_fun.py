@@ -76,9 +76,24 @@ class UserDetails(Base):
         return inserted_id_
 
 
-    def delete_user(self):
+    def delete_user_old(self):
+        '''This is old fun'''
         session.delete(self)
         session.commit()
+
+    def delete_user(self):
+        try:
+            session.delete(self)
+            session.commit()
+            print("User deleted successfully.")
+        except Exception as e:
+            session.rollback()
+            print(f"Error deleting user: {e}")
+
+    @staticmethod
+    def return_user_obj(id_: int = 1):
+        user_obj = session.query(UserDetails).filter(UserDetails.id_ == id_).first()
+        return user_obj if user_obj else None
 
 
     @staticmethod
@@ -188,6 +203,7 @@ if __name__ == "__main__":
         user_name_= "rana_uni",
         full_name_="Rana Universe",
         is_premium_= True,
-        validity_= datetime(2025,7,1,1,1,0))
+        validity_= datetime(2026,7,1,1,1,0))
     user_1.add_user_return_id_()
+
 
